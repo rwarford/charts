@@ -48,3 +48,8 @@ Generate chart secret name
 {{- define "postgresql.secretName" -}}
 {{ default (include "postgresql.fullname" .) .Values.existingSecret }}
 {{- end -}}
+
+{{- define "vault.fullname" -}}
+{{- default "vault" .Values.vault.hostName }}
+{{- end -}}
+

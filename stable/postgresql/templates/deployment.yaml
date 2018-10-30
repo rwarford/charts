@@ -32,6 +32,7 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
     spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       {{- if .Values.affinity }}
       affinity:
 {{ toYaml .Values.affinity | indent 8 }}
@@ -61,6 +62,20 @@ spec:
           - hba_file=/pg_hba/pg_hba.conf
           {{- end }}
         env:
+        - name: SERVICE_HOST
+          value: {{ template "postgresql.fullname" . }}.{{ .Release.Namespace }}.svc
+        - name: SERVICE_PORT
+          value: "{{ .Values.service.port }}"
+        - name: VAULT_ADDR
+          value: {{ .Values.vault.protocol }}://{{ template "vault.fullname" . }}:{{ .Values.vault.port }}
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
         - name: POSTGRES_USER
           value: {{ default "postgres" .Values.postgresUser | quote }}
           # Required for pg_isready in the health probes.

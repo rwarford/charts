@@ -1,9 +1,19 @@
 ## postgres image repository
-image: "postgres"
+image: gcr.io/roger-warford/postgres
 ## postgres image version
 ## ref: https://hub.docker.com/r/library/postgres/tags/
 ##
-imageTag: "9.6.2"
+imageTag: 10.5-vault
+
+serviceAccount:
+  name: postgres
+  annotations:
+    db-initializer.mattersight.com/role: server
+
+vault:
+  protocol: http
+  port:     8200
+  hostName: vault
 
 ## Specify a imagePullPolicy
 ## 'Always' if imageTag is 'latest', else set to 'IfNotPresent'

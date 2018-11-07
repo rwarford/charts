@@ -32,12 +32,9 @@ vault:
 ## Default: random 10 character string
 # postgresPassword:
 
-## Inject postgresPassword via a volume mount instead of environment variable
-usePasswordFile: false
-
-## Use Existing secret instead of creating one
-## It must have a postgres-password key containing the desired password
-# existingSecret: 'secret'
+## if usePasswordSecret is false the password will be generated in the postgres image
+# otherwise it will be supplied in a secret.
+usePasswordSecret: false
 
 ## Create a database
 ## Default: the postgres user

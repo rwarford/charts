@@ -87,10 +87,7 @@ spec:
           value: {{ default "" .Values.postgresInitdbArgs | quote }}
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
-        {{- if .Values.usePasswordFile }}
-        - name: POSTGRES_PASSWORD_FILE
-          value: /conf/postgres-password
-        {{- else }}
+        {{- if .Values.usePasswordSecret }}
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -178,14 +175,6 @@ spec:
           configMapKeyRef:
             name: {{ template "postgresql.fullname" . }}
             key: custom-metrics.yaml
-      {{- end }}
-      {{- if .Values.usePasswordFile }}
-      - name: password-file
-        secret:
-          secretName: {{ template "postgresql.secretName" . }}
-          items:
-            - key: postgres-password
-              path: postgres-password
       {{- end }}
       {{- if .Values.pgHbaConf }}
       - name: pg-hba-conf
